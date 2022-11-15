@@ -1,6 +1,11 @@
+import tkinter as tk
+import tkinter.ttk as ttk
+import tkinter.messagebox as tkm
 import pygame as pg
 import sys
 from random import randint
+
+root = tk.Tk()
 coin_0 = [0, 0, 0, 0, 0]
 bomblist = [0]
 class Screen:
@@ -68,7 +73,7 @@ class Bomb:
 class Coin:
     def __init__(self, scr:Screen):
         self.value = randint(1, 3) #コインの価値
-        sfc = pg.image.load("fig/coin01.png")
+        sfc = pg.image.load("fig/coin02.png")
         self.sfc = pg.transform.rotozoom(sfc, 0, self.value + 1)
         self.rct = self.sfc.get_rect()
         self.rct.centerx = randint(200, scr.rct.width-200)
@@ -186,12 +191,18 @@ def main():
         # 練習8
         for i in range(len(bomblist)):
             if kkt.rct.colliderect(bomblist[i].rct): # こうかとんrctが爆弾rctと重なったら
+                root.withdraw()
+                tkm.showinfo("GameOver", f"こうかとんは亡くなった")
                 return
 
         for i in range(len(coin_0)):# こうかとんrctがcoin[i]と重なったら
             if kkt.rct.colliderect(coin_0[i].rct):
                 score.up_score(coin_0[i].get_value())
                 coin_0[i].teleport(scr)
+
+        
+
+    
                 
         pg.display.update() #練習2
         clock.tick(1000)
